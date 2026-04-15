@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Bài tập CSDL | Quan hệ 1-1, 1-N, N-N</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            background: #eef2f7;
+            padding: 2rem 1.5rem;
+            color: #1e2a3e;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            margin-bottom: 2.5rem;
+        }
+
+        .header h1 {
+            font-size: 2rem;
+            font-weight: 600;
+            background: linear-gradient(135deg, #1e3c72, #2b4c7c);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            letter-spacing: -0.3px;
+        }
+
+        .header p {
+            color: #2c3e50;
+            margin-top: 0.5rem;
+            font-weight: 400;
+            opacity: 0.8;
+        }
+
+        /* Grid cards */
+        .cards-grid {
+            /* display: flex; */
+            flex-wrap: wrap;
+            gap: 2rem;
+            justify-content: center;
+        }
+
+        /* Card chung */
+        .card {
+            background: white;
+            border-radius: 2rem;
+            box-shadow: 0 20px 30px -12px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            transition: transform 0.2s ease, box-shadow 0.2s;
+            flex: 1;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 25px 35px -14px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Header card */
+        .card-header {
+            padding: 1.2rem 1.8rem;
+            color: white;
+            font-weight: bold;
+            font-size: 1.5rem;
+            letter-spacing: -0.2px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .card-header span:first-child {
+            font-size: 1.8rem;
+        }
+
+        .card-badge {
+            background: rgba(255, 255, 255, 0.25);
+            padding: 4px 12px;
+            border-radius: 40px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            margin-left: auto;
+        }
+
+        /* Nội dung */
+        .card-content {
+            padding: 1.2rem 1.5rem 1.5rem;
+            flex: 1;
+        }
+
+        .section {
+            margin-bottom: 1.4rem;
+            border-bottom: 1px solid #e9edf2;
+            padding-bottom: 0.8rem;
+        }
+
+        .section:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .section-title {
+            font-weight: 700;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #4b6a8b;
+            margin-bottom: 0.6rem;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+            margin-top: 0.5rem;
+            border-radius: 1rem;
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.85rem;
+            font-family: 'Courier New', 'SF Mono', monospace;
+        }
+
+        .data-table th {
+            background-color: #f1f5f9;
+            text-align: left;
+            padding: 8px 10px;
+            font-weight: 600;
+            color: #1e2a3e;
+            border-bottom: 1px solid #dce3ec;
+        }
+
+        .data-table td {
+            padding: 8px 10px;
+            border-bottom: 1px solid #eef2f8;
+            color: #2c3e50;
+        }
+
+        .data-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .highlight {
+            background: #fef9e3;
+            font-weight: 500;
+        }
+
+        .query-block {
+            background: #f8fafc;
+            border-left: 4px solid #3b82f6;
+            padding: 0.75rem 1rem;
+            border-radius: 14px;
+            margin-top: 1rem;
+            font-size: 0.8rem;
+        }
+
+        .query-title {
+            font-weight: 700;
+            color: #0c4a6e;
+            margin-bottom: 6px;
+            font-size: 0.8rem;
+        }
+
+        .query-result {
+            font-family: monospace;
+            background: #ffffffdb;
+            margin-top: 8px;
+            border-radius: 12px;
+        }
+
+        .note {
+            font-size: 0.7rem;
+            color: #5b6e8c;
+            margin-top: 0.8rem;
+            text-align: center;
+            border-top: 1px dashed #cddfe7;
+            padding-top: 0.7rem;
+        }
+
+        /* màu sắc riêng cho từng bài */
+        .card-1 .card-header { background: linear-gradient(105deg, #0b3b5f, #1b5a7a); }
+        .card-2 .card-header { background: linear-gradient(105deg, #2c5f2d, #4c8b4a); }
+        .card-3 .card-header { background: linear-gradient(105deg, #9c2e4b, #c44569); }
+
+        footer {
+            text-align: center;
+            margin-top: 3rem;
+            font-size: 0.75rem;
+            color: #6c86a3;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1>📊 Mô hình quan hệ trong CSDL</h1>
+        <p>Thể hiện qua 3 dạng: 1-1, 1-N, N-N | Dữ liệu mẫu + truy vấn</p>
+    </div>
+
+    <div class="cards-grid">
+        <!-- ========================= BÀI 1 : 1-1 ========================= -->
+        <div class="card card-1">
+            <div class="card-header">
+                <span>🆔</span> Quan hệ 1-1
+                <span class="card-badge">One‑to‑One</span>
+            </div>
+            <div class="card-content">
+                <div class="section">
+                    <div class="section-title">📌 Bảng & ràng buộc</div>
+                    <div class="table-wrapper">
+                        <table class="data-table">
+                            <thead>
+                                <tr><th>NhanVien</th><th>Khóa chính</th><th>Khóa ngoại</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>maNV (PK)</td><td>✅</td><td></td></tr>
+                                <tr><td>tenNV</td><td></td><td></td></tr>
+                                <tr style="background:#f8f9fc;"><td colspan="3"><strong>TheNhanVien</strong></td></tr>
+                                <tr><td>maThe (PK)</td><td>✅</td><td></td></tr>
+                                <tr><td>ngayCap</td><td></td><td></td></tr>
+                                <tr><td>maNV (FK, UNIQUE)</td><td></td><td>🔗 UNIQUE → 1-1</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="note">🔹 Mỗi nhân viên chỉ có 1 thẻ, mỗi thẻ thuộc 1 nhân viên (FK + UNIQUE)</div>
+                </div>
+
+                <div class="section">
+                    <div class="section-title">👥 Dữ liệu: 4 nhân viên + 3 thẻ</div>
+                    <div class="table-wrapper">
+                        <table class="data-table">
+                            <thead><tr><th>maNV</th><th>tenNV</th></tr></thead>
+                            <tbody>
+                                <tr><td>NV01</td><td>Nguyễn Minh Anh</td></tr>
+                                <tr><td>NV02</td><td>Trần Thị Bích</td></tr>
+                                <tr><td>NV03</td><td>Lê Hoàng Nam</td></tr>
+                                <tr><td>NV04</td><td>Phạm Thanh Hương</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div style="margin-top: 10px;">
+                        <table class="data-table">
+                            <thead><tr><th>maThe</th><th>ngayCap</th><th>maNV (FK)</th></tr></thead>
+                            <tbody>
+                                <tr><td>T001</td><td>2025-01-10</td><td>NV01</td></tr>
+                                <tr><td>T002</td><td>2025-02-15</td><td>NV02</td></tr>
+                                <tr><td>T003</td><td>2025-03-20</td><td>NV04</td></tr>
+                                <tr class="highlight"><td colspan="3">💡 NV03 chưa có thẻ (phù hợp 1-1: không bắt buộc 2 chiều)</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="query-block">
+                    <div class="query-title">🔎 a. Hiển thị tên nhân viên và ngày cấp thẻ</div>
+                    <div class="table-wrapper query-result">
+                        <table class="data-table">
+                            <thead><tr><th>tenNV</th><th>ngayCap</th></tr></thead>
+                            <tbody>
+                                <tr><td>Nguyễn Minh Anh</td><td>2025-01-10</td></tr>
+                                <tr><td>Trần Thị Bích</td><td>2025-02-15</td></tr>
+                                <tr><td>Lê Hoàng Nam</td><td><em>NULL (chưa có thẻ)</em></td></tr>
+                                <tr><td>Phạm Thanh Hương</td><td>2025-03-20</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div style="font-size: 0.7rem; margin-top: 8px; background:#f1f5f9; border-radius: 12px; padding: 6px 10px;">
+                        📝 SQL: SELECT nv.tenNV, the.ngayCap FROM NhanVien nv LEFT JOIN TheNhanVien the ON nv.maNV = the.maNV;
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ========================= BÀI 2 : 1-N ========================= -->
+        <div class="card card-2">
+            <div class="card-header">
+                <span>🏫</span> Quan hệ 1-N
+                <span class="card-badge">One‑to‑Many</span>
+            </div>
+            <div class="card-content">
+                <div class="section">
+                    <div class="section-title">📌 Bảng & khóa ngoại</div>
+                    <div class="table-wrapper">
+                        <table class="data-table">
+                            <thead><tr><th>LopHoc</th><th>Khóa</th><th></th></tr></thead>
+                            <tbody>
+                                <tr><td>maLop (PK)</td><td>✅</td><td>Mã lớp</td></tr>
+                                <tr><td>tenLop</td><td></td><td>Tên lớp</td></tr>
+                                <tr style="background:#f8f9fc;"><td colspan="3"><strong>SinhVien</strong></td></tr>
+                                <tr><td>maSV (PK)</td><td>✅</td><td></td></tr>
+                                <tr><td>tenSV</td><td></td><td></td></tr>
+                                <tr><td>maLop (FK)</td><td>🔗</td><td>Tham chiếu LopHoc</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="note">🏷️ Một lớp có nhiều sinh viên, mỗi sinh viên thuộc một lớp.</div>
+                </div>
+
+                <div class="section">
+                    <div class="section-title">📚 Dữ liệu: 3 lớp & 6 sinh viên</div>
+                    <div class="table-wrapper">
+                        <table class="data-table">
+                            <thead><tr><th>maLop</th><th>tenLop</th></tr></thead>
+                            <tbody>
+                                <tr><td>L01</td><td>Công nghệ thông tin K18</td></tr>
+                                <tr><td>L02</td><td>Quản trị kinh doanh K18</td></tr>
+                                <tr><td>L03</td><td>Kỹ thuật phần mềm K19</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div style="margin-top: 12px;">
+                        <table class="data-table">
+                            <thead><tr><th>maSV</th><th>tenSV</th><th>maLop (FK)</th></tr></thead>
+                            <tbody>
+                                <tr><td>SV01</td><td>Nguyễn Văn An</td><td>L01</td></tr>
+                                <tr><td>SV02</td><td>Trần Thị Bảo</td><td>L01</td></tr>
+                                <tr><td>SV03</td><td>Lê Minh Đức</td><td>L02</td></tr>
+                                <tr><td>SV04</td><td>Phạm Thị Ngọc</td><td>L02</td></tr>
+                                <tr><td>SV05</td><td>Hoàng Văn Hải</td><td>L03</td></tr>
+                                <tr><td>SV06</td><td>Vũ Thị Lan</td><td>L03</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="query-block">
+                    <div class="query-title">📖 a. Hiển thị tên sinh viên và tên lớp</div>
+                    <div class="table-wrapper query-result">
+                        <table class="data-table">
+                            <thead><tr><th>tenSV</th><th>tenLop</th></tr></thead>
+                            <tbody>
+                                <tr><td>Nguyễn Văn An</td><td>Công nghệ thông tin K18</td></tr>
+                                <tr><td>Trần Thị Bảo</td><td>Công nghệ thông tin K18</td></tr>
+                                <tr><td>Lê Minh Đức</td><td>Quản trị kinh doanh K18</td></tr>
+                                <tr><td>Phạm Thị Ngọc</td><td>Quản trị kinh doanh K18</td></tr>
+                                <tr><td>Hoàng Văn Hải</td><td>Kỹ thuật phần mềm K19</td></tr>
+                                <tr><td>Vũ Thị Lan</td><td>Kỹ thuật phần mềm K19</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div style="font-size: 0.7rem; margin-top: 8px; background:#eef3ea; border-radius: 12px; padding: 6px 10px;">
+                        📝 SQL: SELECT sv.tenSV, lh.tenLop FROM SinhVien sv JOIN LopHoc lh ON sv.maLop = lh.maLop;
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ========================= BÀI 3 : N-N ========================= -->
+        <div class="card card-3">
+            <div class="card-header">
+                <span>📘</span> Quan hệ N-N
+                <span class="card-badge">Many‑to‑Many</span>
+            </div>
+            <div class="card-content">
+                <div class="section">
+                    <div class="section-title">🗂️ Cấu trúc 3 bảng + ràng buộc</div>
+                    <div class="table-wrapper">
+                        <table class="data-table">
+                            <tbody>
+                                <tr><td><strong>SinhVien</strong> (maSV PK, tenSV)</td><td>🎓</td></tr>
+                                <tr><td><strong>MonHoc</strong> (maMH PK, tenMH)</td><td>📖</td></tr>
+                                <tr><td><strong>DangKy</strong> (maSV FK, maMH FK, diem) </td><td>🔗 PK (maSV, maMH)</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="note">✨ Nhiều sinh viên ↔ nhiều môn học, bảng DangKy lưu điểm.</div>
+                </div>
+
+                <div class="section">
+                    <div class="section-title">👩‍🎓 5 sinh viên & 4 môn học</div>
+                    <div style="display: flex; gap: 12px; flex-wrap: wrap; justify-content: space-between;">
+                        <div style="flex:1">
+                            <table class="data-table">
+                                <thead><tr><th>maSV</th><th>tenSV</th></tr></thead>
+                                <tbody>
+                                    <tr><td>SV01</td><td>Nguyễn Hoàng Nam</td></tr>
+                                    <tr><td>SV02</td><td>Trần Thu Trang</td></tr>
+                                    <tr><td>SV03</td><td>Lê Bảo Châu</td></tr>
+                                    <tr><td>SV04</td><td>Phạm Đức Anh</td></tr>
+                                    <tr><td>SV05</td><td>Vũ Hải Yến</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div style="flex:1">
+                            <table class="data-table">
+                                <thead><tr><th>maMH</th><th>tenMH</th></tr></thead>
+                                <tbody>
+                                    <tr><td>MH01</td><td>Cơ sở dữ liệu</td></tr>
+                                    <tr><td>MH02</td><td>Lập trình Web</td></tr>
+                                    <tr><td>MH03</td><td>Toán rời rạc</td></tr>
+                                    <tr><td>MH04</td><td>Trí tuệ nhân tạo</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <div class="section-title">📋 Bảng Đăng Ký (mỗi SV học 2–3 môn)</div>
+                    <div class="table-wrapper">
+                        <table class="data-table">
+                            <thead><tr><th>maSV</th><th>maMH</th><th>diem</th><th style="width:35%">Ghi chú</th></tr></thead>
+                            <tbody>
+                                <tr><td>SV01</td><td>MH01</td><td>8.5</td><td rowspan="3">SV01: 3 môn</td></tr>
+                                <tr><td>SV01</td><td>MH02</td><td>7.8</td></tr>
+                                <tr><td>SV01</td><td>MH04</td><td>9.0</td></tr>
+                                <tr><td>SV02</td><td>MH01</td><td>6.5</td><td rowspan="2">SV02: 2 môn</td></tr>
+                                <tr><td>SV02</td><td>MH03</td><td>7.2</td></tr>
+                                <tr><td>SV03</td><td>MH02</td><td>8.9</td><td rowspan="3">SV03: 3 môn</td></tr>
+                                <tr><td>SV03</td><td>MH03</td><td>9.5</td></tr>
+                                <tr><td>SV03</td><td>MH04</td><td>8.0</td></tr>
+                                <tr><td>SV04</td><td>MH01</td><td>7.0</td><td rowspan="2">SV04: 2 môn</td></tr>
+                                <tr><td>SV04</td><td>MH02</td><td>8.2</td></tr>
+                                <tr><td>SV05</td><td>MH02</td><td>9.3</td><td rowspan="3">SV05: 3 môn</td></tr>
+                                <tr><td>SV05</td><td>MH03</td><td>7.9</td></tr>
+                                <tr><td>SV05</td><td>MH04</td><td>8.4</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="note">📌 Tổng cộng 13 bản ghi đăng ký, thể hiện quan hệ N-N hoàn chỉnh.</div>
+                </div>
+
+                <div class="query-block">
+                    <div class="query-title">📖 a. Hiển thị tên sinh viên, tên môn, điểm</div>
+                    <div class="table-wrapper query-result">
+                        <table class="data-table">
+                            <thead><tr><th>tenSV</th><th>tenMH</th><th>diem</th></tr></thead>
+                            <tbody>
+                                <tr><td>Nguyễn Hoàng Nam</td><td>Cơ sở dữ liệu</td><td>8.5</td></tr>
+                                <tr><td>Nguyễn Hoàng Nam</td><td>Lập trình Web</td><td>7.8</td></tr>
+                                <tr><td>Nguyễn Hoàng Nam</td><td>Trí tuệ nhân tạo</td><td>9.0</td></tr>
+                                <tr><td>Trần Thu Trang</td><td>Cơ sở dữ liệu</td><td>6.5</td></tr>
+                                <tr><td>Trần Thu Trang</td><td>Toán rời rạc</td><td>7.2</td></tr>
+                                <tr><td>Lê Bảo Châu</td><td>Lập trình Web</td><td>8.9</td></tr>
+                                <tr><td>Lê Bảo Châu</td><td>Toán rời rạc</td><td>9.5</td></tr>
+                                <tr><td>Lê Bảo Châu</td><td>Trí tuệ nhân tạo</td><td>8.0</td></tr>
+                                <tr><td>Phạm Đức Anh</td><td>Cơ sở dữ liệu</td><td>7.0</td></tr>
+                                <tr><td>Phạm Đức Anh</td><td>Lập trình Web</td><td>8.2</td></tr>
+                                <tr><td>Vũ Hải Yến</td><td>Lập trình Web</td><td>9.3</td></tr>
+                                <tr><td>Vũ Hải Yến</td><td>Toán rời rạc</td><td>7.9</td></tr>
+                                <tr><td>Vũ Hải Yến</td><td>Trí tuệ nhân tạo</td><td>8.4</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div style="font-size: 0.7rem; margin-top: 8px; background:#fae9ef; border-radius: 12px; padding: 6px 10px;">
+                        📝 SQL: SELECT sv.tenSV, mh.tenMH, dk.diem FROM SinhVien sv JOIN DangKy dk ON sv.maSV = dk.maSV JOIN MonHoc mh ON dk.maMH = mh.maMH ORDER BY sv.tenSV;
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <footer>
+        ⚡ Mỗi thẻ minh họa đầy đủ: tạo bảng + ràng buộc + dữ liệu mẫu + truy vấn đặc trưng.
+        <br>✅ Quan hệ 1-1 (UNIQUE FK) | 1-N (FK thường) | N-N (bảng trung gian)
+    </footer>
+</div>
+</body>
+</html>
